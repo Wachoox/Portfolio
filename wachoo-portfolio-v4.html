@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Wachoo — Portfolio</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23c4845c'>W</text></svg>">
+
+    <!-- Meta -->
+    <meta name="description" content="Portfolio de Wachoo — Étudiant ingénieur EPITA, spécialisation IA. Projets : Hygée (santé féminine), Bot Trading Gold, Fine-tuning LLM, Plateforme associative.">
+    <meta property="og:title" content="Wachoo — Portfolio">
+    <meta property="og:description" content="Étudiant ingénieur EPITA · IA & Data · Projets : app santé en production, trading algorithmique, fine-tuning LLM, plateforme associative.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #1a1714; --bg-2: #23201b; --bg-card: #262220;
+            --text: #e8e2d8; --text-2: #bfb6a8; --text-3: #8a7e6d; --text-4: #5c5347;
+            --terra: #c4845c; --olive: #8a9e68; --rust: #c4785c; --clay: #b8956e;
+            --border: #3d3830; --border-lt: #33302a;
+            --overlay: rgba(26,23,20,0.92);
+            --checker-a: rgba(196,132,92,0.03); --checker-b: rgba(138,158,104,0.02);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; -webkit-font-smoothing:antialiased; }
+        ::selection { background:rgba(160,96,58,0.2); color:var(--terra); }
+        ::-webkit-scrollbar { width:4px; }
+        ::-webkit-scrollbar-track { background:var(--bg); }
+        ::-webkit-scrollbar-thumb { background:var(--text-4); border-radius:2px; }
+
+        body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(45deg,var(--checker-a) 25%,transparent 25%),linear-gradient(-45deg,var(--checker-a) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--checker-b) 75%),linear-gradient(-45deg,transparent 75%,var(--checker-b) 75%); background-size:40px 40px; background-position:0 0,0 20px,20px -20px,20px 0; pointer-events:none; z-index:0; }
+
+        /* TOPBAR */
+        .topbar { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:0.7rem 2rem; background:var(--overlay); backdrop-filter:blur(12px); border-bottom:1px solid var(--border-lt); }
+        .topbar-name { font-family:'Cinzel',serif; font-size:1rem; font-weight:600; color:var(--text); }
+        .topbar-nav { display:flex; gap:1.5rem; }
+        .tb-nav { font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; text-decoration:none; color:var(--text-3); font-weight:500; transition:transform 0.25s ease,color 0.3s; }
+        .tb-nav:hover { color:var(--terra); }
+        .topbar-r { display:flex; gap:0.5rem; align-items:center; }
+        .tb { padding:0.25rem 0.5rem; font-family:'Inter',sans-serif; font-size:0.58rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid var(--border); border-radius:2px; background:transparent; color:var(--text-3); cursor:pointer; transition:all 0.3s; }
+        .tb:hover { border-color:var(--terra); color:var(--terra); }
+        .tb.on { background:var(--text); color:var(--bg); }
+        .lw { display:flex; border:1px solid var(--border); border-radius:2px; overflow:hidden; }
+        .lw .tb { border:none; border-radius:0; }
+
+        /* PAINTING */
+        .painting-section { position:relative; min-height:60vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+        .painting-bg { position:absolute; inset:0; background-size:cover; background-position:center; background-attachment:fixed; opacity:0.18; }
+        .painting-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,var(--bg),transparent 20%,transparent 80%,var(--bg)); }
+        .painting-content { position:relative; z-index:1; text-align:center; max-width:650px; padding:4rem 2rem; }
+        .painting-content blockquote { font-family:'Cormorant Garamond',serif; font-size:clamp(1.2rem,3vw,1.7rem); font-style:italic; font-weight:400; color:var(--text); line-height:1.5; margin-bottom:0.8rem; }
+        .painting-content cite { font-family:'Inter',sans-serif; font-style:normal; font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-3); }
+
+        /* MATH */
+        .math-bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+        .math-sym { position:absolute; font-family:'Cormorant Garamond',serif; font-weight:400; color:var(--clay); opacity:0.09; user-select:none; white-space:nowrap; animation:drift linear infinite; animation-duration:var(--drift-duration,60s); }
+        @keyframes drift { 0%{transform:translate(0,0) rotate(var(--rot,0deg))} 25%{transform:translate(var(--dx,10px),var(--dy,-8px)) rotate(var(--rot,0deg))} 50%{transform:translate(calc(var(--dx,10px) * -0.5),calc(var(--dy,-8px) * 1.5)) rotate(var(--rot,0deg))} 75%{transform:translate(calc(var(--dx,10px) * 0.8),calc(var(--dy,-8px) * -0.5)) rotate(var(--rot,0deg))} 100%{transform:translate(0,0) rotate(var(--rot,0deg))} }
+
+        /* SECTION ART */
+        .s-art-wrap { position:relative; overflow:hidden; z-index:1; }
+        .s-art { position:absolute; top:-10%; left:0; width:100%; height:120%; pointer-events:none; overflow:hidden; opacity:0.14; will-change:transform; }
+        .s-art img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+        .s-art-fade { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(180deg,var(--bg) 0%,transparent 8%,transparent 92%,var(--bg) 100%); pointer-events:none; }
+
+        /* SECTION */
+        .s { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:5rem 2rem; }
+        .s.s-wide { max-width:1100px; }
+        .s-label { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:var(--text-4); font-weight:600; margin-bottom:0.6rem; display:block; }
+        .s h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.5rem); font-weight:400; line-height:1.2; margin-bottom:1rem; }
+        .s h2 em { color:var(--terra); }
+        .s p { font-size:0.95rem; color:var(--text-2); margin-bottom:1.5rem; max-width:600px; }
+
+        /* HERO */
+        .hero { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; justify-content:center; max-width:900px; margin:0 auto; padding:6rem 2rem 4rem; box-sizing:border-box; }
+        .hero-quote { font-family:'Cormorant Garamond',serif; font-size:0.9rem; font-style:italic; color:var(--text-3); margin-bottom:2.5rem; max-width:420px; line-height:1.6; opacity:0; transform:translateY(20px); animation:fu 0.8s 0.2s forwards; }
+        .hero-quote .auth { font-style:normal; font-family:'Inter',sans-serif; font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-4); display:block; margin-top:0.3rem; }
+        .hero h1 { font-family:'Cinzel',serif; font-size:clamp(3.2rem,9vw,6.5rem); font-weight:400; line-height:0.95; letter-spacing:0.03em; margin-bottom:1rem; clip-path:inset(0 100% 0 0); animation:clip-reveal 1.2s cubic-bezier(0.77,0,0.175,1) 0.4s forwards; }
+        @keyframes clip-reveal { 0%{clip-path:inset(0 100% 0 0)} 100%{clip-path:inset(0 0% 0 0)} }
+        .hero-rule { width:50px; height:1px; background:var(--terra); margin-bottom:1rem; opacity:0; animation:fu 0.8s 0.55s forwards; }
+        .hero-tag { font-size:0.92rem; color:var(--text-2); max-width:460px; line-height:1.8; opacity:0; transform:translateY(15px); animation:fu 0.8s 0.65s forwards; }
+        .hero-tag em { color:var(--terra); font-style:normal; font-weight:500; }
+        .hero-badge { display:inline-block; padding:0.35rem 1rem; font-size:0.5rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--terra); font-weight:600; border:1px solid rgba(196,132,92,0.3); border-radius:2px; margin-bottom:2rem; margin-top:0.5rem; }
+        .hero-links { display:flex; gap:0.6rem; flex-wrap:wrap; }
+        .hero-link { font-size:0.6rem; letter-spacing:1.5px; text-transform:uppercase; text-decoration:none; color:var(--text); font-weight:600; padding:0.5rem 1rem; border:1px solid rgba(232,226,216,0.4); border-radius:2px; transition:transform 0.25s ease,color 0.3s,border-color 0.3s,background 0.3s; background:rgba(232,226,216,0.05); }
+        .hero-link:hover { border-color:var(--terra); color:var(--terra); background:transparent; }
+        .hero-scroll { position:absolute; bottom:2.5rem; left:2rem; font-size:0.55rem; letter-spacing:3px; text-transform:uppercase; color:var(--text-4); writing-mode:vertical-rl; animation:pulse 3s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        @keyframes fu { to{opacity:1;transform:translateY(0)} }
+
+        /* MEANDER */
+        .meander { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:0 2rem; height:10px; }
+        .meander-in { width:100%; height:100%; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10' viewBox='0 0 40 10'%3E%3Cpath d='M0 5h3v-3h6v3h3v-3h-3v-2h-6v2h-3z M20 5h3v-3h6v3h3v-3h-3v-2h-6v2h-3z' fill='none' stroke='%23cdc5b8' stroke-width='0.4'/%3E%3C/svg%3E"); background-repeat:repeat-x; opacity:0.5; }
+
+        /* SKILLS BAR */
+        .skills-bar { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:3rem 2rem; }
+        .skills-inner { display:flex; flex-direction:column; gap:1.5rem; padding:2rem; border:1px solid var(--border-lt); border-radius:2px; background:rgba(38,34,32,0.5); }
+        .skills-group { display:flex; align-items:baseline; gap:1.2rem; }
+        .skills-cat { font-size:0.55rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-4); font-weight:600; white-space:nowrap; min-width:130px; }
+
+        /* ODYSSEY */
+        .ody-step { display:grid; grid-template-columns:80px 1fr; gap:1.5rem; padding:1.5rem 0; border-top:1px solid var(--border-lt); }
+        .ody-year { font-family:'Cinzel',serif; font-size:1.3rem; font-weight:400; color:var(--text-4); padding-top:0.15rem; }
+        .ody-place { font-size:0.58rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--terra); font-weight:600; margin-bottom:0.15rem; }
+        .ody-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:600; margin-bottom:0.2rem; }
+        .ody-desc { font-size:0.82rem; color:var(--text-3); }
+
+        /* PROJECT */
+        .proj { border-top:1px solid var(--border); padding:4rem 0; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; transition:transform 0.3s ease; }
+        .proj:last-of-type { border-bottom:1px solid var(--border); }
+        .proj-num { font-family:'Cinzel',serif; font-size:3.5rem; font-weight:400; color:var(--clay); opacity:0.35; line-height:1; margin-bottom:1.5rem; }
+        .proj-tag-row { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.8rem; }
+        .proj-tag,.proj-status { display:inline-flex; align-items:center; height:22px; padding:0 0.5rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; border-radius:2px; margin:0; line-height:1; }
+        .proj-tag { font-size:0.55rem; }
+        .proj-tag.sante { background:rgba(92,110,66,0.1); color:var(--olive); }
+        .proj-tag.finance { background:rgba(160,96,58,0.1); color:var(--terra); }
+        .proj-tag.auto { background:rgba(139,66,48,0.1); color:var(--rust); }
+        .proj-tag.recherche { background:rgba(158,124,104,0.1); color:var(--clay); }
+        .proj-tag.asso { background:rgba(92,110,66,0.1); color:var(--olive); }
+        .proj-tag.ia { background:rgba(92,110,66,0.1); color:var(--olive); }
+        .proj-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:600; line-height:1.2; margin-bottom:1.2rem; }
+        .proj-why { font-size:0.92rem; color:var(--text-2); line-height:1.8; margin-bottom:1.5rem; }
+        .proj-oneliner { border:1px solid var(--text-4); border-radius:2px; padding:1.2rem 1.5rem; position:relative; margin-top:1.5rem; margin-bottom:1.5rem; background:rgba(92,83,71,0.04); }
+        .proj-oneliner-label { position:absolute; top:-8px; left:16px; background:var(--bg); padding:0 8px; font-size:0.5rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--terra); font-weight:600; }
+        .proj-oneliner p { font-size:0.84rem; color:var(--text-2); line-height:1.7; margin:0; }
+        .proj-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1rem; color:var(--text-2); padding:0.8rem 1.2rem; border-left:1px solid var(--text-3); margin-top:1.5rem; line-height:1.5; }
+        .proj-quote .auth { display:block; font-style:normal; font-family:'Inter',sans-serif; font-size:0.55rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-4); margin-top:0.3rem; }
+.proj-detail h4 { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-4); font-weight:600; margin-bottom:0.6rem; }
+        .stack-row { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:2rem; }
+        .stack-chip { font-family:'JetBrains Mono',monospace; font-size:0.62rem; padding:0.2rem 0.5rem; border:1px solid var(--border); border-radius:2px; color:var(--text-2); }
+        .feat { list-style:none; }
+        .feat li { font-size:0.84rem; color:var(--text-2); padding:0.7rem 0 0.7rem 1rem; border-bottom:1px solid var(--border-lt); position:relative; line-height:1.6; cursor:default; transition:background 0.2s,padding-left 0.2s; border-radius:2px; }
+        .feat li:hover { background:rgba(184,149,110,0.06); padding-left:1.3rem; }
+        .feat li::before { content:''; position:absolute; left:0; top:50%; width:4px; height:4px; border-radius:50%; background:var(--terra); transform:translateY(-50%); }
+        .feat-tech { display:block; font-size:0.7rem; color:var(--clay); margin-top:0; font-family:'JetBrains Mono',monospace; max-height:0; overflow:hidden; opacity:0; transition:max-height 0.35s ease,opacity 0.35s ease,margin 0.35s ease; }
+        .feat li:hover .feat-tech { max-height:80px; opacity:1; margin-top:0.35rem; }
+
+        /* PROJECT LINKS */
+        .proj-links { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:1rem; }
+        .proj-link { font-size:0.58rem; letter-spacing:1.5px; text-transform:uppercase; text-decoration:none; color:var(--text-2); font-weight:600; padding:0.35rem 0.7rem; border:1px solid var(--border); border-radius:2px; transition:transform 0.25s ease,color 0.3s,border-color 0.3s,background 0.3s; }
+        .proj-link:hover { border-color:var(--terra); color:var(--terra); }
+        .proj-link:not(.disabled):hover::after { content:' →'; }
+        .proj-link.disabled { opacity:0.35; pointer-events:none; cursor:default; }
+
+        /* STATUS */
+        .proj-status { font-size:0.5rem; font-weight:700; }
+        .proj-status.live { background:rgba(92,110,66,0.15); color:var(--olive); }
+        .proj-status.done { background:rgba(92,83,71,0.15); color:var(--text-3); }
+        .proj-status.active { background:rgba(160,96,58,0.15); color:var(--terra); }
+        .proj-status.wip { background:rgba(196,132,92,0.1); color:var(--clay); }
+
+        /* MINOR PROJECTS */
+        .proj-minor-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:var(--border-lt); margin-top:2rem; }
+        .proj-minor { background:var(--bg); padding:2rem; }
+        .proj-minor .proj-num { font-size:2.5rem; margin-bottom:1rem; }
+        .proj-minor .proj-title { font-size:1.1rem; margin-bottom:0.8rem; }
+        .proj-minor-desc { font-size:0.78rem; color:var(--text-3); line-height:1.6; margin-bottom:1rem; }
+        .proj-minor .stack-chip { font-size:0.55rem; padding:0.15rem 0.4rem; }
+        .proj-minor .proj-tag { font-size:0.5rem; }
+        .proj-minor .proj-status { font-size:0.45rem; }
+
+        /* METRICS */
+        .metrics-bar { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:2rem 2rem 0; }
+        .metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border-lt); }
+        .metric-card { background:var(--bg); padding:2rem; text-align:center; }
+        .metric-num { font-family:'Cinzel',serif; font-size:2.2rem; font-weight:400; color:var(--terra); margin-bottom:0.4rem; }
+        .metric-label { font-size:0.55rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-4); font-weight:600; line-height:1.5; }
+
+        /* PASSIONS */
+        .pass-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px; background:var(--border-lt); margin:2rem 0; }
+        .pass-cell { background:var(--bg); padding:1.5rem; transition:background 0.4s,transform 0.4s; cursor:default; }
+        .pass-cell:hover { background:var(--bg-2); transform:translateY(-3px); }
+        .pass-icon { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--text-4); margin-bottom:0.4rem; transition:color 0.4s,transform 0.4s; }
+        .pass-cell:hover .pass-icon { color:var(--terra); transform:scale(1.2); }
+        .pass-name { font-size:0.82rem; font-weight:600; }
+        .pass-cell:hover .pass-name { color:var(--text); }
+        .pass-sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.75rem; color:var(--text-4); }
+        .pass-cell:hover .pass-sub { color:var(--text-3); }
+
+        /* CONTACT */
+        .contact { text-align:center; padding:5rem 2rem; max-width:500px; margin:0 auto; position:relative; z-index:1; }
+        .contact h2 { font-family:'Playfair Display',serif; font-size:2rem; font-weight:400; margin-bottom:0.8rem; }
+        .contact h2 em { color:var(--terra); font-style:italic; }
+        .contact p { font-size:0.88rem; color:var(--text-2); margin-bottom:1.5rem; max-width:100%; }
+        .contact-links { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+        .cl { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; text-decoration:none; color:var(--text); font-weight:600; padding:0.5rem 1rem; border:1px solid var(--text); border-radius:2px; transition:transform 0.25s ease,color 0.3s,border-color 0.3s,background 0.3s; }
+        .cl:hover { background:var(--text); color:var(--bg); }
+        .contact-separator { width:40px; height:1px; background:var(--border); margin:1.5rem auto; }
+        .contact-projects-label { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-4); font-weight:600; margin-bottom:1rem; }
+        .cl.cl-secondary { border-color:var(--border); color:var(--text-2); font-size:0.6rem; }
+        .cl.cl-secondary:hover { border-color:var(--terra); color:var(--terra); background:transparent; }
+
+        /* FOOTER */
+        .foot { text-align:center; padding:2rem; font-size:0.55rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--text-4); position:relative; z-index:1; border-top:1px solid var(--border-lt); }
+
+        section[id] { scroll-margin-top:4rem; }
+
+        /* SCROLL PROGRESS */
+        .scroll-progress { position:fixed; top:0; left:0; height:3px; width:0%; background:var(--terra); z-index:101; transition:width 0.1s linear; }
+
+        /* ACTIVE NAV */
+        .tb-nav.active { color:var(--terra); }
+
+        /* KEN BURNS */
+        .s-art img { animation:kenburns 20s ease-in-out infinite alternate; }
+        @keyframes kenburns { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.10) translate(-2%,-1.5%)} }
+        .s-art-wrap:nth-child(even) .s-art img { animation-name:kenburns2; }
+        @keyframes kenburns2 { 0%{transform:scale(1) translate(0,0)} 100%{transform:scale(1.08) translate(1.5%,-1%)} }
+
+        /* REVEAL */
+        .rv { opacity:0; transform:translateY(25px); transition:opacity 0.7s ease,transform 0.7s ease; }
+        .rv.vis { opacity:1; transform:translateY(0); }
+
+        /* STAGGER */
+        .proj .feat li { opacity:0; transform:translateY(8px); }
+        .proj.vis .feat li { animation:fu 0.4s ease forwards; }
+        .proj.vis .feat li:nth-child(1) { animation-delay:0.1s; }
+        .proj.vis .feat li:nth-child(2) { animation-delay:0.2s; }
+        .proj.vis .feat li:nth-child(3) { animation-delay:0.3s; }
+        .proj.vis .feat li:nth-child(4) { animation-delay:0.4s; }
+        .proj.vis .feat li:nth-child(5) { animation-delay:0.5s; }
+        .proj .stack-chip { opacity:0; }
+        .proj.vis .stack-chip { animation:fu 0.3s ease forwards; }
+        .proj.vis .stack-chip:nth-child(1) { animation-delay:0.05s; }
+        .proj.vis .stack-chip:nth-child(2) { animation-delay:0.1s; }
+        .proj.vis .stack-chip:nth-child(3) { animation-delay:0.15s; }
+        .proj.vis .stack-chip:nth-child(4) { animation-delay:0.2s; }
+        .proj.vis .stack-chip:nth-child(5) { animation-delay:0.25s; }
+        .proj.vis .stack-chip:nth-child(6) { animation-delay:0.3s; }
+        .proj.vis .stack-chip:nth-child(7) { animation-delay:0.35s; }
+        .proj.vis .stack-chip:nth-child(8) { animation-delay:0.4s; }
+        .proj.vis .stack-chip:nth-child(9) { animation-delay:0.45s; }
+
+        /* REDUCED MOTION */
+        @media (prefers-reduced-motion:reduce) {
+            *,*::before,*::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+            html { scroll-behavior:auto; }
+            .scroll-progress { display:none; }
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .s.s-wide { max-width:100%; }
+            .proj { grid-template-columns:1fr; gap:2rem; }
+            .s-art { display:none; }
+            .hero { padding:5rem 1.5rem 3rem; }
+            .s { padding:3.5rem 1.5rem; }
+            .pass-grid { grid-template-columns:repeat(2,1fr); }
+            .topbar-nav { display:none; }
+            .skills-bar { padding:1.5rem 1.5rem 1rem; }
+            .skills-group { flex-direction:column; gap:0.4rem; }
+            .skills-cat { min-width:unset; }
+            .proj-oneliner { font-size:0.78rem; }
+            .proj-links { gap:0.3rem; }
+            .proj-link { font-size:0.55rem; padding:0.3rem 0.6rem; }
+            .ody-step { grid-template-columns:50px 1fr; gap:1rem; }
+            .ody-year { font-size:1.1rem; }
+            .foot { padding:1.5rem 1rem; }
+            .proj-minor-grid { grid-template-columns:1fr; }
+            .metrics-grid { grid-template-columns:repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="math-bg" id="mathBg"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <a href="#" class="topbar-name" style="text-decoration:none; color:inherit;">Wachoo</a>
+    <nav class="topbar-nav">
+        <a href="#projets" class="tb-nav"><span class="fr">Projets</span><span class="en" style="display:none">Projects</span></a>
+        <a href="#parcours" class="tb-nav"><span class="fr">Parcours</span><span class="en" style="display:none">Journey</span></a>
+        <a href="#passions" class="tb-nav"><span class="fr">Passions</span><span class="en" style="display:none">Passions</span></a>
+        <a href="#contact" class="tb-nav">Contact</a>
+    </nav>
+    <div class="topbar-r">
+        <div class="lw">
+            <button class="tb on" onclick="setLang('fr')">FR</button>
+            <button class="tb" onclick="setLang('en')">EN</button>
+        </div>
+    </div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- HERO -->
+<div class="s-art-wrap" style="min-height:100vh">
+<div class="s-art" style="opacity:0.30"><img src="img/school-of-athens.jpg" alt="" loading="eager"></div>
+<div class="s-art-fade"></div>
+<section class="hero">
+    <div class="hero-quote">
+        <span class="fr">« Ce n'est pas parce que les choses sont difficiles que nous n'osons pas, c'est parce que nous n'osons pas qu'elles sont difficiles. »</span>
+        <span class="en" style="display:none">"It is not because things are difficult that we do not dare, it is because we do not dare that they are difficult."</span>
+        <span class="auth">Sénèque</span>
+    </div>
+    <h1>Wachoo</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-tag">
+        <span class="fr">Étudiant ingénieur à <em>EPITA</em> (ING1), ancien préparationnaire MPSI/MP. Spécialisation visée : <em>Intelligence Artificielle</em>. Je construis des solutions qui naissent d'une obsession : comprendre <em>pourquoi</em> avant de coder <em>comment</em>.</span>
+        <span class="en" style="display:none">Engineering student at <em>EPITA</em> (ING1), former MPSI/MP prep student. Target specialization: <em>Artificial Intelligence</em>. I build solutions born from one obsession: understanding <em>why</em> before coding <em>how</em>.</span>
+    </p>
+    <div class="hero-badge" style="opacity:0; animation: fu 0.8s 0.85s forwards;">
+        <span class="fr">RECHERCHE STAGE IA / DATA — ÉTÉ 2026</span>
+        <span class="en" style="display:none">LOOKING FOR AI / DATA INTERNSHIP — SUMMER 2026</span>
+    </div>
+    <div class="hero-links" style="opacity:0; animation: fu 0.8s 1.05s forwards;">
+        <a href="mailto:adamwachoo19@gmail.com" class="hero-link">Email</a>
+        <a href="https://github.com/Wachoox" target="_blank" class="hero-link">GitHub</a>
+        <a href="https://www.linkedin.com/in/adam-wachoo-45338b378" target="_blank" class="hero-link">LinkedIn</a>
+    </div>
+    <div class="hero-scroll"><span class="fr">Défiler</span><span class="en" style="display:none">Scroll</span></div>
+</section>
+</div>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+
+<!-- ===== I. PROJETS ===== -->
+<div class="s-art-wrap">
+<div class="s-art"><img src="img/creation-of-adam.jpg" alt="" loading="lazy"></div>
+<div class="s-art-fade"></div>
+<section class="s s-wide" id="projets">
+    <span class="s-label rv"><span class="fr">I — Œuvres & Expériences</span><span class="en" style="display:none">I — Works & Experiences</span></span>
+    <h2 class="rv"><span class="fr">Chaque projet naît d'un <em>pourquoi</em></span><span class="en" style="display:none">Every project starts with a <em>why</em></span></h2>
+    <p class="rv"><span class="fr">Je ne code pas pour coder. Je code parce que quelqu'un souffre, parce qu'un système est inefficace, ou parce qu'un problème me fascine.</span><span class="en" style="display:none">I don't code for the sake of coding. I code because someone is suffering, because a system is inefficient, or because a problem fascinates me.</span></p>
+
+    <!-- I: Hygée -->
+    <div class="proj rv">
+        <div>
+            <div class="proj-num">I</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag sante"><span class="fr">Santé & Empathie</span><span class="en" style="display:none">Health & Empathy</span></span>
+                <span class="proj-status live"><span class="fr">En production</span><span class="en" style="display:none">In production</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Hygée — App de soutien émotionnel pour maladies chroniques féminines</span><span class="en" style="display:none">Hygée — Emotional support app for women's chronic conditions</span></h3>
+            <p class="proj-why"><span class="fr">Des millions de femmes souffrent en silence d'endométriose, de SOPK, d'adénomyose ou de fibromyalgie. Le diagnostic prend en moyenne 7 ans. J'ai construit seul Hygée — du nom de la déesse grecque de la santé — une application gratuite, non-lucrative, conçue selon les principes du trauma-informed design. Chaque pixel, chaque mot, chaque interaction dit : « ta douleur est réelle, tu n'es pas seule. »</span><span class="en" style="display:none">Millions of women suffer in silence from endometriosis, PCOS, adenomyosis, or fibromyalgia. Diagnosis takes an average of 7 years. I built Hygée solo — named after the Greek goddess of health — a free, non-profit app designed with trauma-informed principles. Every pixel, every word, every interaction says: "your pain is real, you are not alone."</span></p>
+            <div class="proj-oneliner">
+                <span class="proj-oneliner-label"><span class="fr">Concrètement</span><span class="en" style="display:none">In practice</span></span>
+                <p><span class="fr">Une application web gratuite où les femmes atteintes de maladies chroniques suivent leurs symptômes au quotidien, reçoivent des analyses personnalisées, et génèrent un PDF prêt pour leur médecin.</span><span class="en" style="display:none">A free web app where women with chronic conditions track daily symptoms, receive personalized insights, and generate a PDF ready for their doctor.</span></p>
+            </div>
+            <div class="proj-quote"><span class="fr">« Là où il y a de la souffrance, il devrait y avoir de la présence. »</span><span class="en" style="display:none">"Where there is suffering, there should be presence."</span><span class="auth">Socrate (adapté)</span></div>
+        </div>
+        <div class="proj-detail">
+            <h4><span class="fr">Stack & Architecture</span><span class="en" style="display:none">Stack & Architecture</span></h4>
+            <div class="stack-row"><span class="stack-chip">React</span><span class="stack-chip">Node.js / Express</span><span class="stack-chip">PostgreSQL</span><span class="stack-chip">JWT</span><span class="stack-chip">Recharts</span><span class="stack-chip">jsPDF</span><span class="stack-chip">PWA</span><span class="stack-chip">Vercel</span><span class="stack-chip">Railway</span></div>
+            <ul class="feat">
+                <li><span class="fr">Assistant IA qui détecte les tendances de santé — sans internet</span><span class="en" style="display:none">AI assistant that detects health trends — no internet needed</span><span class="feat-tech"><span class="fr">930 lignes, 50+ règles, 8 catégories — zéro API externe</span><span class="en" style="display:none">930 lines, 50+ rules, 8 categories — zero external API</span></span></li>
+                <li><span class="fr">5 trackers santé — design "invitation, jamais obligation"</span><span class="en" style="display:none">5 health trackers — "invitation, never obligation" design</span><span class="feat-tech"><span class="fr">Pattern crescendo : accordion → bouton → formulaire</span><span class="en" style="display:none">Crescendo pattern: accordion → button → form</span></span></li>
+                <li><span class="fr">S'adapte à 4 pathologies automatiquement</span><span class="en" style="display:none">Adapts to 4 conditions automatically</span><span class="feat-tech"><span class="fr">ConditionContext : endométriose, adénomyose, SOPK, fibromyalgie</span><span class="en" style="display:none">ConditionContext: endometriosis, adenomyosis, PCOS, fibromyalgia</span></span></li>
+                <li><span class="fr">Export PDF médical + FAQ validante (13 questions)</span><span class="en" style="display:none">Medical PDF export + validating FAQ (13 questions)</span></li>
+                <li><span class="fr">En production — 10 bêta-testeuses, installable sur téléphone</span><span class="en" style="display:none">In production — 10 beta testers, installable on phone</span></li>
+            </ul>
+            <div class="proj-links">
+                <a href="https://endometriosis-frontend-henna.vercel.app" target="_blank" class="proj-link"><span class="fr">Essayer l'app</span><span class="en" style="display:none">Try the app</span></a>
+                <a href="https://github.com/Wachoox/endometriosis-frontend" target="_blank" class="proj-link">Code frontend</a>
+                <a href="https://github.com/Wachoox/endometriosis-backend" target="_blank" class="proj-link">Code backend</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- II: Trading -->
+    <div class="proj rv">
+        <div>
+            <div class="proj-num">II</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag finance"><span class="fr">Finance & Mathématiques</span><span class="en" style="display:none">Finance & Mathematics</span></span>
+                <span class="proj-status active"><span class="fr">Paper trading live</span><span class="en" style="display:none">Paper trading live</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Bot de Trading algorithmique — Gold (XAU/USD)</span><span class="en" style="display:none">Algorithmic Trading Bot — Gold (XAU/USD)</span></h3>
+            <p class="proj-why"><span class="fr">Les marchés financiers sont le plus grand système complexe créé par l'homme. Après des centaines d'heures d'observation du marché de l'or, j'ai développé ma propre stratégie propriétaire — pas copiée, construite à force de patience et de rigueur mathématique. Le trading algorithmique, c'est de la discipline stoïcienne appliquée à la théorie des probabilités.</span><span class="en" style="display:none">Financial markets are the greatest complex system created by humanity. After hundreds of hours observing the gold market, I developed my own proprietary strategy — not copied, built through patience and mathematical rigor. Algorithmic trading is stoic discipline applied to probability theory.</span></p>
+            <div class="proj-oneliner">
+                <span class="proj-oneliner-label"><span class="fr">Concrètement</span><span class="en" style="display:none">In practice</span></span>
+                <p><span class="fr">Un programme autonome qui surveille le marché de l'or 24h/24, détecte les opportunités selon ma stratégie mathématique, et m'alerte en temps réel sur Telegram.</span><span class="en" style="display:none">An autonomous program that monitors the gold market 24/7, detects opportunities based on my mathematical strategy, and alerts me in real-time via Telegram.</span></p>
+            </div>
+            <div class="proj-quote"><span class="fr">« Le hasard favorise l'esprit préparé. »</span><span class="en" style="display:none">"Fortune favors the prepared mind."</span><span class="auth">Louis Pasteur</span></div>
+        </div>
+        <div class="proj-detail">
+            <h4><span class="fr">Stack & Architecture</span><span class="en" style="display:none">Stack & Architecture</span></h4>
+            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">Pandas / NumPy / SciPy</span><span class="stack-chip">Twelve Data API</span><span class="stack-chip">VPS Hetzner</span><span class="stack-chip">Telegram Bot</span><span class="stack-chip">Nginx / HTTPS</span><span class="stack-chip">Dashboard HTML/JS</span></div>
+            <ul class="feat">
+                <li><span class="fr">Analyse le marché à 4 échelles de temps pour confirmer chaque signal</span><span class="en" style="display:none">Analyzes the market at 4 time scales to confirm each signal</span><span class="feat-tech"><span class="fr">Multi-timeframe D1 → H4 → H1 → M15, override dynamique</span><span class="en" style="display:none">Multi-timeframe D1 → H4 → H1 → M15, dynamic override</span></span></li>
+                <li><span class="fr">Stratégie validée sur 4 ans de données (~100 000 points)</span><span class="en" style="display:none">Strategy validated on 4 years of data (~100,000 points)</span><span class="feat-tech"><span class="fr">Backtesting Pandas, NumPy, SciPy</span><span class="en" style="display:none">Backtesting with Pandas, NumPy, SciPy</span></span></li>
+                <li><span class="fr">Fonctionne seul 24/7 sur serveur dédié, alertes Telegram</span><span class="en" style="display:none">Runs autonomously 24/7 on dedicated server, Telegram alerts</span><span class="feat-tech"><span class="fr">VPS Hetzner Ubuntu, webhook GitHub, cycles intelligents</span><span class="en" style="display:none">Hetzner Ubuntu VPS, GitHub webhook, smart cycles</span></span></li>
+                <li><span class="fr">Module de surveillance statistique — détecte toute dérive</span><span class="en" style="display:none">Statistical monitoring module — detects any drift</span><span class="feat-tech"><span class="fr">Score de santé pondéré, intervalles de confiance binomiaux</span><span class="en" style="display:none">Weighted health score, binomial confidence intervals</span></span></li>
+                <li><span class="fr">Dashboard web sécurisé avec graphiques temps réel</span><span class="en" style="display:none">Secured web dashboard with real-time charts</span><span class="feat-tech"><span class="fr">Lightweight Charts, HTTPS / Let's Encrypt, refresh 30s</span><span class="en" style="display:none">Lightweight Charts, HTTPS / Let's Encrypt, 30s refresh</span></span></li>
+            </ul>
+            <div class="proj-links">
+                <a href="https://smcbot.duckdns.org/dashboard.html" target="_blank" class="proj-link"><span class="fr">Voir le dashboard</span><span class="en" style="display:none">View dashboard</span></a>
+                <span class="proj-link disabled"><span class="fr">Repo privé</span><span class="en" style="display:none">Private repo</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- III: Vies2s -->
+    <div class="proj rv">
+        <div>
+            <div class="proj-num">III</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag asso"><span class="fr">Engagement & Humanité</span><span class="en" style="display:none">Community & Humanity</span></span>
+                <span class="proj-status live"><span class="fr">Actif depuis sept. 2025</span><span class="en" style="display:none">Active since Sept. 2025</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Vies2s — Association d'aide aux jeunes de quartier</span><span class="en" style="display:none">Vies2s — Youth Community Association</span></h3>
+            <p class="proj-why"><span class="fr">La technique sans humanité est stérile. Depuis septembre 2025, je m'engage chez Vies2s où je porte plusieurs casquettes — cours de maths-physique, maraudes pour les sans-abri, organisation de repas, encadrement d'activités. Parce que les vrais problèmes ne se résolvent pas derrière un écran.</span><span class="en" style="display:none">Technology without humanity is sterile. Since September 2025, I've been involved with Vies2s, wearing many hats — math tutoring, outreach for the homeless, organizing meals, leading youth activities. Because real problems aren't solved behind a screen.</span></p>
+            <div class="proj-oneliner">
+                <span class="proj-oneliner-label"><span class="fr">Concrètement</span><span class="en" style="display:none">In practice</span></span>
+                <p><span class="fr">J'ai construit la plateforme web de l'association (planning, présences, suivi bénévoles, dashboard admin) et en parallèle, je donne des cours et participe aux maraudes.</span><span class="en" style="display:none">I built the association's web platform (scheduling, attendance, volunteer tracking, admin dashboard) while also teaching and participating in outreach.</span></p>
+            </div>
+            <div class="proj-quote"><span class="fr">« L'obstacle est le chemin. »</span><span class="en" style="display:none">"The impediment to action advances action."</span><span class="auth">Marc Aurèle — Méditations, V.20</span></div>
+        </div>
+        <div class="proj-detail">
+            <h4><span class="fr">Stack & Plateforme</span><span class="en" style="display:none">Stack & Platform</span></h4>
+            <div class="stack-row"><span class="stack-chip">Next.js 16</span><span class="stack-chip">TypeScript</span><span class="stack-chip">Supabase</span><span class="stack-chip">Prisma</span><span class="stack-chip">Tailwind CSS v4</span><span class="stack-chip">Framer Motion</span><span class="stack-chip">Resend</span><span class="stack-chip">Vercel</span></div>
+            <ul class="feat">
+                <li><span class="fr">Plateforme web complète — 14 pages, utilisée au quotidien</span><span class="en" style="display:none">Complete web platform — 14 pages, used daily</span><span class="feat-tech"><span class="fr">Next.js 16, TypeScript strict, 30 tables Supabase</span><span class="en" style="display:none">Next.js 16, strict TypeScript, 30 Supabase tables</span></span></li>
+                <li><span class="fr">Authentification multi-rôle — chaque membre voit ce qui le concerne</span><span class="en" style="display:none">Multi-role auth — each member sees what concerns them</span><span class="feat-tech"><span class="fr">Supabase Auth, rôles admin/bénévole/membre</span><span class="en" style="display:none">Supabase Auth, admin/volunteer/member roles</span></span></li>
+                <li><span class="fr">Dashboard admin : planning, présences, gestion, exports</span><span class="en" style="display:none">Admin dashboard: scheduling, attendance, management, exports</span><span class="feat-tech"><span class="fr">Prisma ORM, Framer Motion, Resend, Vercel</span><span class="en" style="display:none">Prisma ORM, Framer Motion, Resend, Vercel</span></span></li>
+            </ul>
+            <h4><span class="fr">Ce que je fais</span><span class="en" style="display:none">What I do</span></h4>
+            <ul class="feat">
+                <li><span class="fr">Cours de maths et physique — collège & lycée, préparation bac blanc</span><span class="en" style="display:none">Math & physics tutoring — exam prep</span></li>
+                <li><span class="fr">Maraudes pour les sans-abri — organisation et participation</span><span class="en" style="display:none">Homeless outreach — organizing and participating</span></li>
+                <li><span class="fr">Logistique : courses, cuisine, préparation des repas solidaires</span><span class="en" style="display:none">Logistics: shopping, cooking, preparing community meals</span></li>
+                <li><span class="fr">Encadrement des activités et sorties pour les jeunes</span><span class="en" style="display:none">Youth activities and outings</span></li>
+            </ul>
+            <div class="proj-links">
+                <a href="https://vies2s-app.vercel.app/" target="_blank" class="proj-link"><span class="fr">Voir la plateforme</span><span class="en" style="display:none">View platform</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minor projects grid -->
+    <div class="proj-minor-grid rv">
+        <div class="proj-minor">
+            <div class="proj-num">IV</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag recherche"><span class="fr">Recherche</span><span class="en" style="display:none">Research</span></span>
+                <span class="proj-status done"><span class="fr">Terminé — 2024</span><span class="en" style="display:none">Completed — 2024</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Stage de recherche — Arithmétique modulaire</span><span class="en" style="display:none">Research internship — Modular arithmetic</span></h3>
+            <p class="proj-minor-desc"><span class="fr">Formulation d'hypothèses, modélisation Python, rapports LaTeX. UPHF Valenciennes, été 2024. Devenu mon TIPE.</span><span class="en" style="display:none">Hypothesis formulation, Python modeling, LaTeX reports. UPHF Valenciennes, summer 2024. Became my TIPE.</span></p>
+            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">LaTeX</span></div>
+        </div>
+        <div class="proj-minor">
+            <div class="proj-num">V</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag auto"><span class="fr">Automatisation</span><span class="en" style="display:none">Automation</span></span>
+                <span class="proj-status live"><span class="fr">En service</span><span class="en" style="display:none">In service</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Agent IA — Gardien de productivité</span><span class="en" style="display:none">AI Agent — Productivity Guardian</span></h3>
+            <p class="proj-minor-desc"><span class="fr">Surveille mes projets d'école, alerte en cas d'oubli de push, push automatique de secours.</span><span class="en" style="display:none">Monitors school projects, alerts on forgotten pushes, emergency auto-push.</span></p>
+            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">Git</span><span class="stack-chip">Alertes</span></div>
+        </div>
+        <div class="proj-minor">
+            <div class="proj-num">VI</div>
+            <div class="proj-tag-row">
+                <span class="proj-tag ia"><span class="fr">IA & Recherche</span><span class="en" style="display:none">AI & Research</span></span>
+                <span class="proj-status wip"><span class="fr">En cours</span><span class="en" style="display:none">In progress</span></span>
+            </div>
+            <h3 class="proj-title"><span class="fr">Fine-tuning Qwen 2.5 2B — Conception de puces</span><span class="en" style="display:none">Fine-tuning Qwen 2.5 2B — Chip design</span></h3>
+            <p class="proj-minor-desc"><span class="fr">Entraînement spécialisé d'un LLM pour la conception de puces. Techniques QLoRA sur Apple Silicon.</span><span class="en" style="display:none">Specialized LLM training for chip design. QLoRA techniques on Apple Silicon.</span></p>
+            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">QLoRA</span><span class="stack-chip">MLX</span></div>
+        </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics-bar rv">
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-num" data-target="2">0</div>
+                <div class="metric-label"><span class="fr">apps en<br>production</span><span class="en" style="display:none">apps in<br>production</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-num" data-target="10">0</div>
+                <div class="metric-label"><span class="fr">bêta-testeuses<br>actives</span><span class="en" style="display:none">active<br>beta testers</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-num" data-text="24/7">24/7</div>
+                <div class="metric-label"><span class="fr">bot autonome<br>sur serveur dédié</span><span class="en" style="display:none">autonomous bot<br>on dedicated server</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-num" data-target="6">0</div>
+                <div class="metric-label"><span class="fr">projets<br>personnels</span><span class="en" style="display:none">personal<br>projects</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+
+<!-- ===== II. PARCOURS ===== -->
+<div class="s-art-wrap">
+<div class="s-art"><img src="img/wanderer.jpg" alt="" loading="lazy"></div>
+<div class="s-art-fade"></div>
+<section class="s" id="parcours">
+    <span class="s-label rv"><span class="fr">II — L'Odyssée</span><span class="en" style="display:none">II — The Odyssey</span></span>
+    <h2 class="rv"><span class="fr">Un parcours en <em>spirale</em>, pas en ligne droite</span><span class="en" style="display:none">A <em>spiral</em> path, not a straight line</span></h2>
+    <div class="ody-step rv"><div class="ody-year">2021</div><div><div class="ody-place">Sorbonne Université — Jussieu, Paris</div><div class="ody-title"><span class="fr">Prépa intégrée Maths-Physique</span><span class="en" style="display:none">Integrated Math-Physics Prep</span></div><div class="ody-desc"><span class="fr">Mathématiques, physique, informatique à Jussieu. Premier contact avec les mathématiques universitaires — le socle.</span><span class="en" style="display:none">Mathematics, physics, computer science at Jussieu. First encounter with university-level mathematics — the foundation.</span></div></div></div>
+    <div class="ody-step rv"><div class="ody-year">2022</div><div><div class="ody-place">Lycée de Saint-Cloud — ECG, Maths approfondies & HGG</div><div class="ody-title"><span class="fr">La curiosité au-delà des chiffres</span><span class="en" style="display:none">Curiosity beyond numbers</span></div><div class="ody-desc"><span class="fr">Maths approfondies, histoire, géopolitique, culture générale. Une année qui a élargi la vision — comprendre les systèmes humains autant que les systèmes formels.</span><span class="en" style="display:none">Advanced mathematics, history, geopolitics, general culture. A year that broadened the vision — understanding human systems as much as formal ones.</span></div></div></div>
+    <div class="ody-step rv"><div class="ody-year">2023</div><div><div class="ody-place">MPSI — Lycée Notre-Dame de Grâce, Maubeuge</div><div class="ody-title"><span class="fr">Le retour aux fondamentaux — Major de promotion</span><span class="en" style="display:none">Back to fundamentals — Top of class</span></div><div class="ody-desc"><span class="fr">Algèbre linéaire, analyse, arithmétique, probabilités, Python. Major de promotion. Le challenge quotidien, la rigueur absolue.</span><span class="en" style="display:none">Linear algebra, analysis, arithmetic, probability, Python. Top of class. Daily challenge, absolute rigor.</span></div></div></div>
+    <div class="ody-step rv"><div class="ody-year">2024</div><div><div class="ody-place">Stage de recherche — UPHF, Valenciennes</div><div class="ody-title"><span class="fr">Arithmétique modulaire & théorie des graphes</span><span class="en" style="display:none">Modular arithmetic & graph theory</span></div><div class="ody-desc"><span class="fr">Deux mois de recherche en arithmétique modulaire et théorie des graphes, encadré par un maître de conférences. Formulation d'hypothèses, modélisation Python, rapports LaTeX. Ce travail est devenu mon TIPE.</span><span class="en" style="display:none">Two months of research in modular arithmetic and graph theory, supervised by an associate professor. Hypothesis formulation, Python modeling, LaTeX reports. This work became my TIPE.</span></div></div></div>
+    <div class="ody-step rv"><div class="ody-year">2024</div><div><div class="ody-place">MP — Lycée Claude Bernard, Paris 16e</div><div class="ody-title"><span class="fr">La spé à Paris</span><span class="en" style="display:none">Advanced year in Paris</span></div><div class="ody-desc"><span class="fr">Algèbre avancée, calcul multivariable, équations différentielles, analyse complexe, mécanique classique, électromagnétisme. La synthèse.</span><span class="en" style="display:none">Advanced algebra, multivariable calculus, differential equations, complex analysis, classical mechanics, electromagnetism. The synthesis.</span></div></div></div>
+    <div class="ody-step rv"><div class="ody-year">2025</div><div><div class="ody-place">EPITA — ING1, Le Kremlin-Bicêtre</div><div class="ody-title"><span class="fr">L'ingénierie comme synthèse — Cap vers l'IA</span><span class="en" style="display:none">Engineering as synthesis — Heading towards AI</span></div><div class="ody-desc"><span class="fr">Programmation C, Java, SQL, assembleur. Projet Yakamon (back-end Java/Quarkus). Double cursus en parallèle : Licence Mathématiques à Paris-Saclay. Spécialisation visée : SC-IA (Intelligence Artificielle).</span><span class="en" style="display:none">C, Java, SQL, assembly programming. Yakamon project (Java/Quarkus back-end). Dual degree in parallel: Mathematics BSc at Paris-Saclay. Target specialization: SC-IA (Artificial Intelligence).</span></div></div></div>
+</section>
+</div>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+
+<!-- ===== III. AU-DELÀ DU CODE ===== -->
+<div class="s-art-wrap">
+<div class="s-art"><img src="img/vitruvian-man.jpg" alt="" loading="lazy"></div>
+<div class="s-art-fade"></div>
+<section class="s" id="passions">
+    <span class="s-label rv"><span class="fr">III — Au-delà du code</span><span class="en" style="display:none">III — Beyond code</span></span>
+    <h2 class="rv"><span class="fr">Un développeur est d'abord <em>un esprit</em></span><span class="en" style="display:none">A developer is first and foremost <em>a mind</em></span></h2>
+    <p class="rv"><span class="fr">Le code est un outil. Ce qui le rend puissant, c'est l'esprit qui le manie.</span><span class="en" style="display:none">Code is a tool. What makes it powerful is the mind that wields it.</span></p>
+    <div class="pass-grid rv">
+        <div class="pass-cell"><div class="pass-icon">∑</div><div class="pass-name"><span class="fr">Mathématiques</span><span class="en" style="display:none">Mathematics</span></div><div class="pass-sub"><span class="fr">Rigueur, abstraction, beauté</span><span class="en" style="display:none">Rigor, abstraction, beauty</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">∂</div><div class="pass-name"><span class="fr">Physique</span><span class="en" style="display:none">Physics</span></div><div class="pass-sub"><span class="fr">Modélisation, équations</span><span class="en" style="display:none">Modeling, equations</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">Φ</div><div class="pass-name"><span class="fr">Philosophie</span><span class="en" style="display:none">Philosophy</span></div><div class="pass-sub"><span class="fr">Stoïcisme, éthique</span><span class="en" style="display:none">Stoicism, ethics</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">Ω</div><div class="pass-name"><span class="fr">Histoire</span><span class="en" style="display:none">History</span></div><div class="pass-sub"><span class="fr">Antiquité, empires</span><span class="en" style="display:none">Antiquity, empires</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">⊕</div><div class="pass-name"><span class="fr">Géopolitique</span><span class="en" style="display:none">Geopolitics</span></div><div class="pass-sub"><span class="fr">Systèmes complexes, stratégie</span><span class="en" style="display:none">Complex systems, strategy</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">♯</div><div class="pass-name"><span class="fr">Musique</span><span class="en" style="display:none">Music</span></div><div class="pass-sub"><span class="fr">Harmonie, rythme</span><span class="en" style="display:none">Harmony, rhythm</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">∫</div><div class="pass-name"><span class="fr">Finance</span><span class="en" style="display:none">Finance</span></div><div class="pass-sub"><span class="fr">Marchés, probabilités</span><span class="en" style="display:none">Markets, probability</span></div></div>
+        <div class="pass-cell"><div class="pass-icon">∇</div><div class="pass-name"><span class="fr">Sciences</span><span class="en" style="display:none">Sciences</span></div><div class="pass-sub"><span class="fr">Curiosité sans frontières</span><span class="en" style="display:none">Boundless curiosity</span></div></div>
+    </div>
+</section>
+</div>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+
+<!-- SKILLS BAR -->
+<section class="skills-bar">
+    <span class="s-label rv"><span class="fr">Compétences techniques</span><span class="en" style="display:none">Technical skills</span></span>
+    <div class="skills-inner">
+        <div class="skills-group rv">
+            <span class="skills-cat"><span class="fr">Langages</span><span class="en" style="display:none">Languages</span></span>
+            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">Java</span><span class="stack-chip">C</span><span class="stack-chip">TypeScript</span><span class="stack-chip">JavaScript</span><span class="stack-chip">SQL</span><span class="stack-chip">HTML/CSS</span><span class="stack-chip">LaTeX</span></div>
+        </div>
+        <div class="skills-group rv">
+            <span class="skills-cat"><span class="fr">Frameworks & Outils</span><span class="en" style="display:none">Frameworks & Tools</span></span>
+            <div class="stack-row"><span class="stack-chip">React</span><span class="stack-chip">Next.js</span><span class="stack-chip">Node.js / Express</span><span class="stack-chip">Prisma</span><span class="stack-chip">Tailwind CSS</span><span class="stack-chip">PostgreSQL</span><span class="stack-chip">Supabase</span><span class="stack-chip">Git</span><span class="stack-chip">Linux</span><span class="stack-chip">Vercel</span></div>
+        </div>
+        <div class="skills-group rv">
+            <span class="skills-cat"><span class="fr">IA & Data</span><span class="en" style="display:none">AI & Data</span></span>
+            <div class="stack-row"><span class="stack-chip">Pandas</span><span class="stack-chip">NumPy</span><span class="stack-chip">SciPy</span><span class="stack-chip">QLoRA</span><span class="stack-chip">MLX</span><span class="stack-chip">Fine-tuning LLM</span></div>
+        </div>
+    </div>
+</section>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+
+<!-- ===== CONTACT ===== -->
+<div class="s-art-wrap">
+<div class="s-art"><img src="img/colosseum.jpg" alt="" loading="lazy"></div>
+<div class="s-art-fade"></div>
+<section class="contact" id="contact">
+    <span class="s-label rv"><span class="fr">IV — Dialogue</span><span class="en" style="display:none">IV — Dialogue</span></span>
+    <h2 class="rv"><span class="fr">Construisons quelque chose<br><em>ensemble</em></span><span class="en" style="display:none">Let's build something<br><em>together</em></span></h2>
+    <p class="rv"><span class="fr">Si mon parcours vous intrigue ou si vous avez un projet qui mérite de la curiosité et de la rigueur, parlons-en.</span><span class="en" style="display:none">If my journey intrigues you or you have a project that deserves curiosity and rigor, let's talk.</span></p>
+    <div class="contact-links rv">
+        <a href="mailto:adamwachoo19@gmail.com" class="cl">Email</a>
+        <a href="https://github.com/Wachoox" target="_blank" class="cl">GitHub</a>
+        <a href="https://www.linkedin.com/in/adam-wachoo-45338b378" target="_blank" class="cl">LinkedIn</a>
+    </div>
+    <div class="contact-separator rv"></div>
+    <div class="contact-projects-label rv"><span class="fr">Mes projets en ligne</span><span class="en" style="display:none">My projects online</span></div>
+    <div class="contact-links rv">
+        <a href="https://endometriosis-frontend-henna.vercel.app" target="_blank" class="cl cl-secondary"><span class="fr">Hygée — App santé</span><span class="en" style="display:none">Hygée — Health app</span></a>
+        <a href="https://smcbot.duckdns.org/dashboard.html" target="_blank" class="cl cl-secondary"><span class="fr">Dashboard Trading</span><span class="en" style="display:none">Trading Dashboard</span></a>
+        <a href="https://vies2s-app.vercel.app/" target="_blank" class="cl cl-secondary"><span class="fr">Vies2s — Plateforme</span><span class="en" style="display:none">Vies2s — Platform</span></a>
+    </div>
+</section>
+</div>
+
+<div class="meander rv"><div class="meander-in"></div></div>
+<footer class="foot"><span class="fr">Conçu avec intention · MMXXVI</span><span class="en" style="display:none">Crafted with intention · MMXXVI</span></footer>
+
+<script>
+    // Force scroll to top on page load
+    window.addEventListener('load', function() {
+        if (window.location.hash) {
+            history.replaceState(null, null, window.location.pathname);
+        }
+        setTimeout(function() { window.scrollTo(0, 0); }, 0);
+    });
+
+    const items = [
+        'E = mc²','F = ma','F = G·m₁m₂/r²','iℏ∂ψ/∂t = Ĥψ','PV = nRT','∇·E = ρ/ε₀',
+        'ΔxΔp ≥ ℏ/2','eⁱᵖ + 1 = 0','a² + b² = c²','∑1/n² = π²/6',
+        'det(A−λI) = 0','∂²u/∂t² = c²∇²u','∀ε>0, ∃δ>0','dS = μSdt + σSdW',
+        '∫','∑','∂','∇','∞','π','√','Δ','θ','λ','φ','ψ','ω','ℝ','ℂ','∅'
+    ];
+    const bg = document.getElementById('mathBg');
+    const cols = 5, rows = 6;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const span = document.createElement('span');
+            span.className = 'math-sym';
+            const item = items[Math.floor(Math.random() * items.length)];
+            span.textContent = item;
+            const baseX = (c / cols) * 100 + (100 / cols / 2);
+            const baseY = (r / rows) * 100 + (100 / rows / 2);
+            span.style.left = (baseX + (Math.random() * 16 - 8)) + '%';
+            span.style.top = (baseY + (Math.random() * 10 - 5)) + '%';
+            const isEq = item.includes('=') || item.includes('≥') || item.includes('∀');
+            span.style.fontSize = isEq ? (0.65 + Math.random() * 0.5) + 'rem' : (1.5 + Math.random() * 2.5) + 'rem';
+            const rot = (Math.random() * 14 - 7);
+            span.style.setProperty('--rot', rot + 'deg');
+            span.style.setProperty('--dx', (Math.random() * 40 - 20) + 'px');
+            span.style.setProperty('--dy', (Math.random() * 30 - 15) + 'px');
+            span.style.setProperty('--drift-duration', (25 + Math.random() * 20) + 's');
+            span.style.transform = 'rotate(' + rot + 'deg)';
+            bg.appendChild(span);
+        }
+    }
+
+    function setLang(l) {
+        document.querySelectorAll('.lw .tb').forEach(b => b.classList.remove('on'));
+        document.querySelector(`.lw .tb[onclick="setLang('${l}')"]`).classList.add('on');
+        document.querySelectorAll('.fr').forEach(e => e.style.display = l==='fr' ? '' : 'none');
+        document.querySelectorAll('.en').forEach(e => e.style.display = l==='en' ? '' : 'none');
+        document.documentElement.lang = l;
+    }
+
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+    }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.rv').forEach(e => obs.observe(e));
+
+    // Scroll progress bar
+    const scrollBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (window.scrollY / docH) * 100;
+        scrollBar.style.width = scrolled + '%';
+    });
+
+    // Active nav highlight
+    const navLinks = document.querySelectorAll('.tb-nav');
+    const sections = document.querySelectorAll('section[id]');
+    function updateActiveNav() {
+        let current = '';
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= 300 && rect.bottom > 300) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (current && link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    }
+    window.addEventListener('scroll', updateActiveNav);
+
+    // Parallax on paintings
+    const artWrappers = document.querySelectorAll('.s-art-wrap');
+    function updateParallax() {
+        artWrappers.forEach(wrap => {
+            const art = wrap.querySelector('.s-art');
+            if (!art) return;
+            const rect = wrap.getBoundingClientRect();
+            const windowH = window.innerHeight;
+            if (rect.bottom < 0 || rect.top > windowH) return;
+            const center = rect.top + rect.height / 2;
+            const offset = (center - windowH / 2) * 0.08;
+            art.style.transform = 'translateY(' + offset + 'px)';
+        });
+        requestAnimationFrame(updateParallax);
+    }
+    requestAnimationFrame(updateParallax);
+
+    // Animated counters
+    const counters = document.querySelectorAll('.metric-num[data-target]');
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.getAttribute('data-target'));
+                const duration = 1500;
+                const start = performance.now();
+                function step(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.round(ease * target);
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+                counterObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+    counters.forEach(c => counterObserver.observe(c));
+
+    // 3D tilt on project cards
+    const projCards = document.querySelectorAll('.proj');
+    projCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = 'perspective(1000px) rotateY(' + (x * 3) + 'deg) rotateX(' + (-y * 3) + 'deg)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+        });
+    });
+
+    // Magnetic buttons
+    const magneticEls = document.querySelectorAll('.hero-link, .cl, .proj-link:not(.disabled), .tb-nav');
+    magneticEls.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            el.style.transform = 'translate(' + (x * 0.2) + 'px, ' + (y * 0.2) + 'px)';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = 'translate(0, 0)';
+        });
+    });
+
+    // Konami Code Easter Egg
+    const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+    let konamiIndex = 0;
+    document.addEventListener('keydown', (e) => {
+        if (e.code === konamiCode[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                konamiIndex = 0;
+                const arts = document.querySelectorAll('.s-art');
+                arts.forEach(art => {
+                    art.style.transition = 'opacity 1s ease';
+                    art.style.opacity = '0.6';
+                });
+                document.body.style.boxShadow = 'inset 0 0 100px rgba(196,132,92,0.15)';
+                setTimeout(() => {
+                    arts.forEach(art => { art.style.opacity = ''; });
+                    document.body.style.boxShadow = '';
+                }, 5000);
+            }
+        } else {
+            konamiIndex = 0;
+        }
+    });
+</script>
+</body>
+</html>
