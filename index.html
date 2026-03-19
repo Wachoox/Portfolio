@@ -103,11 +103,19 @@
         .meander { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:0 2rem; height:10px; }
         .meander-in { width:100%; height:100%; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='10' viewBox='0 0 40 10'%3E%3Cpath d='M0 5h3v-3h6v3h3v-3h-3v-2h-6v2h-3z M20 5h3v-3h6v3h3v-3h-3v-2h-6v2h-3z' fill='none' stroke='%23cdc5b8' stroke-width='0.4'/%3E%3C/svg%3E"); background-repeat:repeat-x; opacity:0.5; }
 
-        /* SKILLS BAR */
-        .skills-bar { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:3rem 2rem; }
-        .skills-inner { display:flex; flex-direction:column; gap:1.5rem; padding:2rem 0; }
-        .skills-group { display:flex; align-items:baseline; gap:1.2rem; }
-        .skills-cat { font-size:0.55rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-4); font-weight:600; white-space:nowrap; min-width:130px; }
+        /* STELES */
+        .steles-wrap { position:relative; z-index:1; display:flex; justify-content:center; gap:16px; max-width:800px; margin:0 auto; padding:0 2rem 2.5rem; }
+        .stele { position:relative; overflow:hidden; border:0.5px solid rgba(184,149,110,0.3); flex:1; max-width:240px; opacity:0; transform:translateY(25px); transition:opacity 0.7s ease,transform 0.7s ease,border-color 0.4s ease,box-shadow 0.4s ease; }
+        .stele:nth-child(2) { transition-delay:0.15s,0.15s,0s,0s; }
+        .stele:nth-child(3) { transition-delay:0.3s,0.3s,0s,0s; }
+        .steles-wrap.vis .stele { opacity:1; transform:translateY(0); }
+        .stele:hover { border-color:rgba(184,149,110,0.5); box-shadow:0 0 20px rgba(184,149,110,0.08); transform:translateY(-2px); }
+        .steles-wrap.vis .stele:hover { transform:translateY(-2px); }
+        .stele::after { content:''; position:absolute; inset:0; background:rgba(20,18,14,0.72); }
+        .stele-bg { position:absolute; inset:0; background:url('img/marble-texture.jpg') center/cover; }
+        .stele-top { position:relative; z-index:1; background:rgba(184,149,110,0.06); border-bottom:0.5px solid rgba(184,149,110,0.2); padding:14px 16px 10px; text-align:center; font-family:'Cinzel',serif; font-size:9px; letter-spacing:3.5px; text-transform:uppercase; color:rgba(184,149,110,0.7); text-shadow:0 1px 3px rgba(0,0,0,0.5); }
+        .stele-body { position:relative; z-index:1; padding:20px 16px 24px; text-align:center; font-family:'Cormorant Garamond',serif; font-size:14px; color:rgba(255,255,255,0.85); line-height:2.3; letter-spacing:1.2px; text-shadow:0 1px 4px rgba(0,0,0,0.6); }
+        .stele-base { position:relative; z-index:1; height:8px; border-top:0.5px solid rgba(184,149,110,0.2); }
 
         /* ODYSSEY */
         .ody-step { display:grid; grid-template-columns:80px 1fr; gap:1.5rem; padding:1.5rem 0; border-top:1px solid var(--border-lt); }
@@ -258,9 +266,8 @@
             .s { padding:3.5rem 1.5rem; }
             .pass-grid { grid-template-columns:repeat(2,1fr); }
             .topbar-nav { display:none; }
-            .skills-bar { padding:1.5rem 1.5rem 1rem; }
-            .skills-group { flex-direction:column; gap:0.4rem; }
-            .skills-cat { min-width:unset; }
+            .steles-wrap { flex-direction:column; align-items:center; padding:1.5rem 1.5rem 1rem; }
+            .stele { width:100%; max-width:280px; }
             .proj-oneliner { font-size:0.78rem; }
             .proj-links { gap:0.3rem; }
             .proj-link { font-size:0.55rem; padding:0.3rem 0.6rem; }
@@ -283,6 +290,7 @@
         <a href="#projets" class="tb-nav"><span class="fr">Projets</span><span class="en" style="display:none">Projects</span></a>
         <a href="#parcours" class="tb-nav"><span class="fr">Parcours</span><span class="en" style="display:none">Journey</span></a>
         <a href="#passions" class="tb-nav"><span class="fr">Passions</span><span class="en" style="display:none">Passions</span></a>
+        <a href="#competences" class="tb-nav"><span class="fr">Compétences</span><span class="en" style="display:none">Skills</span></a>
         <a href="#contact" class="tb-nav">Contact</a>
     </nav>
     <div class="topbar-r">
@@ -521,7 +529,7 @@
 <div class="s-art-wrap">
 <div class="s-art" style="opacity:0.35"><img src="img/consummation-of-empire.jpg" alt="" loading="lazy"></div>
 <div class="s-art-fade"></div>
-<section class="s" id="passions">
+<section class="s" id="passions" style="padding-bottom:2rem;">
     <span class="s-label rv"><span class="fr">III — Au-delà du code</span><span class="en" style="display:none">III — Beyond code</span></span>
     <h2 class="rv"><span class="fr">Un développeur est d'abord <em>un esprit</em></span><span class="en" style="display:none">A developer is first and foremost <em>a mind</em></span></h2>
     <p class="rv"><span class="fr">Le code est un outil. Ce qui le rend puissant, c'est l'esprit qui le manie.</span><span class="en" style="display:none">Code is a tool. What makes it powerful is the mind that wields it.</span></p>
@@ -536,28 +544,30 @@
         <div class="pass-cell"><div class="pass-icon">∇</div><div class="pass-name"><span class="fr">Sciences</span><span class="en" style="display:none">Sciences</span></div><div class="pass-sub"><span class="fr">Curiosité sans frontières</span><span class="en" style="display:none">Boundless curiosity</span></div></div>
     </div>
 </section>
-</div>
 
-<div class="meander rv"><div class="meander-in"></div></div>
-
-<!-- SKILLS BAR -->
-<section class="skills-bar">
-    <span class="s-label rv"><span class="fr">Compétences techniques</span><span class="en" style="display:none">Technical skills</span></span>
-    <div class="skills-inner">
-        <div class="skills-group rv">
-            <span class="skills-cat"><span class="fr">Langages</span><span class="en" style="display:none">Languages</span></span>
-            <div class="stack-row"><span class="stack-chip">Python</span><span class="stack-chip">Java</span><span class="stack-chip">C</span><span class="stack-chip">TypeScript</span><span class="stack-chip">JavaScript</span><span class="stack-chip">SQL</span><span class="stack-chip">HTML/CSS</span><span class="stack-chip">LaTeX</span></div>
-        </div>
-        <div class="skills-group rv">
-            <span class="skills-cat"><span class="fr">Frameworks & Outils</span><span class="en" style="display:none">Frameworks & Tools</span></span>
-            <div class="stack-row"><span class="stack-chip">React</span><span class="stack-chip">Next.js</span><span class="stack-chip">Node.js / Express</span><span class="stack-chip">Prisma</span><span class="stack-chip">Tailwind CSS</span><span class="stack-chip">PostgreSQL</span><span class="stack-chip">Supabase</span><span class="stack-chip">Git</span><span class="stack-chip">Linux</span><span class="stack-chip">Vercel</span></div>
-        </div>
-        <div class="skills-group rv">
-            <span class="skills-cat"><span class="fr">IA & Data</span><span class="en" style="display:none">AI & Data</span></span>
-            <div class="stack-row"><span class="stack-chip">Pandas</span><span class="stack-chip">NumPy</span><span class="stack-chip">SciPy</span><span class="stack-chip">QLoRA</span><span class="stack-chip">MLX</span><span class="stack-chip">Fine-tuning LLM</span></div>
-        </div>
+<!-- STELES -->
+<section id="competences"><div class="steles-wrap rv">
+    <div class="stele">
+        <div class="stele-bg"></div>
+        <div class="stele-top"><span class="fr">Langages</span><span class="en" style="display:none">Languages</span></div>
+        <div class="stele-body">Python<br>Java<br>C<br>TypeScript<br>JavaScript<br>SQL<br>HTML/CSS<br>LaTeX</div>
+        <div class="stele-base"></div>
     </div>
+    <div class="stele">
+        <div class="stele-bg"></div>
+        <div class="stele-top"><span class="fr">Frameworks</span><span class="en" style="display:none">Frameworks</span></div>
+        <div class="stele-body">React<br>Next.js<br>Node.js / Express<br>PostgreSQL<br>Prisma<br>Tailwind CSS<br>Supabase<br>Vercel</div>
+        <div class="stele-base"></div>
+    </div>
+    <div class="stele">
+        <div class="stele-bg"></div>
+        <div class="stele-top"><span class="fr">IA & Data</span><span class="en" style="display:none">AI & Data</span></div>
+        <div class="stele-body">Pandas<br>NumPy<br>SciPy<br>QLoRA<br>MLX<br>Fine-tuning LLM</div>
+        <div class="stele-base"></div>
+    </div>
+</div>
 </section>
+</div>
 
 <div class="meander rv"><div class="meander-in"></div></div>
 
