@@ -6,7 +6,7 @@
 ## Identité
 - **Qui :** Adam "Wachoo", étudiant ingénieur EPITA ING1, ancien MPSI/MP, spécialisation visée SC-IA
 - **Double cursus :** Licence Maths Paris-Saclay en parallèle
-- **Objectif actuel :** Stage IA / Data — Été 2026
+- **Objectif actuel :** Recherche d’une alternance IA / Data
 - **Esthétique :** "Néoclassicisme Digital" — dark mode uniquement, peintures classiques en fond, citations stoïciennes, symboles math flottants
 
 ## Stack du portfolio
